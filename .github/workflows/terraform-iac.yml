@@ -4,6 +4,8 @@ on: [push]
 
 env:
   TF_LOG: INFO
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
   terraform:
@@ -31,15 +33,13 @@ jobs:
     # format    
     - name: Terraform fmt
       id: fmt
+      if: github.ref != 'refs/heads/main'
       run: terraform fmt -check
       continue-on-error: true    
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       id: init
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: terraform init -input=false
       
     # validate  
@@ -51,9 +51,7 @@ jobs:
       run: terraform plan
       
     
-    # aplly
+    # apply
     - name: Terraform apply
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      if: github.ref == 'refs/heads/main'
       run: terraform apply -auto-approve -input=false
