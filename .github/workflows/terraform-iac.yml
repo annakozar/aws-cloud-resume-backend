@@ -16,7 +16,8 @@ jobs:
     # Set the working directory to main for the config files
     defaults:
       run:
-        shell: bash        
+        shell: bash
+        working-directory: ./terraform
 
     steps:
     # Checkout the repository to the GitHub Actions runner
