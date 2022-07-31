@@ -16,8 +16,7 @@ jobs:
     # Set the working directory to main for the config files
     defaults:
       run:
-        shell: bash
-        working-directory: ./main
+        shell: bash        
 
     steps:
     # Checkout the repository to the GitHub Actions runner
